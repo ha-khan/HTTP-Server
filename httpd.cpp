@@ -6,7 +6,6 @@
 #include <iostream>
 #include <limits.h>
 #include <locale>
-#include <locale>
 #include <netdb.h>
 #include <netinet/in.h>
 #include <stdio.h>
@@ -74,12 +73,9 @@ void start_httpd(unsigned short port, string doc_root) {
 }
 
 /*
-
     //Main driver of a single http response/request
     //Control of program flow
     //Request/Response flow.
-
-
 */
 void HandleHTTPRequest(int clntSocket, string doc_root) {
 
@@ -91,8 +87,6 @@ void HandleHTTPRequest(int clntSocket, string doc_root) {
                                           // requests, and partial data input
 
   (void)amountRead;
-
-  // cout << "Amount Read: " << amountRead << endl;
 
   HTTPRequest *hRequest = GenerateHTTPRequest(buffer);
 
@@ -112,9 +106,6 @@ void HandleHTTPRequest(int clntSocket, string doc_root) {
 /*
         TODO: Still need to edit this so that recv() doesn't work
         under the assumption that all bytes are sent in one call.
-
-
-
 */
 int PopulateBuffer(char *inBuffer, int bufferSize, int clntSocket) {
 
@@ -126,8 +117,6 @@ int PopulateBuffer(char *inBuffer, int bufferSize, int clntSocket) {
 }
 
 bool CheckIfProperFormat(string inBuffer) {
-  // less than two spaces
-  // less than two [crlf]
   string tString = inBuffer;
 
   // Checks if in form request<sp>uri<sp>version<cr><lf>
@@ -169,39 +158,7 @@ bool CheckIfProperFormat(string inBuffer) {
 }
 
 /*
-bool CheckIfMoreThanTwoSpace(string httpRequest){
-  size_t count = 0;
-  for(size_t i = 0; i < httpRequest.size(); i++){
-    if(httpRequest[i] == ' '){
-      count++;
-    }
-    if(httpRequest[i] == '\r'){
-      break;
-    }
-  }
-
-  if(count != 2){
-    return true;
-  }
-  else{
-    return false;
-  }
-}
-*/
-
-// Need to modify these so that the correct format is needed, mainly two spaces,
-// if thats true theen request is good...
-/*
-
         TODO: FURTHER TESTING NEEDED
-
-        struct HTTPRequest {
-          string RequestType;
-          string URI;
-          string Version;
-          string KeyValues;
-        };
-
 */
 HTTPRequest *GenerateHTTPRequest(char *inBuffer) {
 
@@ -234,24 +191,15 @@ HTTPRequest *GenerateHTTPRequest(char *inBuffer) {
 
 /*
  *    Need to test further
- *
- *
- *
- *
- *
- *
- *
- *
+
  * */
 void GetConnectionClose(HTTPRequest *inPtr) {
   std::string toFind = "Connection: close";
   std::size_t found = inPtr->KeyValues.find(toFind);
 
   if (found != std::string::npos) {
-    //  cout << "true" << endl;
     inPtr->ConnectionClose = true;
   } else {
-    // cout << "false" << endl;
     inPtr->ConnectionClose = false;
   }
 }
@@ -499,9 +447,7 @@ string GetContentLength(string fPath) {
 }
 
 /*
-
-        Is the control unit for the sendHTTP response
-
+        Control unit for the sendHTTP response
 */
 void sendHTTPResponse(int clntSocket, HTTPResponse *inPtr) {
   switch (inPtr->eCode) {
@@ -568,7 +514,6 @@ void sendHTTPResponseHelper(int clntSocket, HTTPResponse *inPtr,
 
   (void)clntSocket;
   string toSend;
-  // if(inPtr != NULL){
   if (!(inPtr->RequestProblem)) {
     if (inPtr->ConnectionClose) {
 
