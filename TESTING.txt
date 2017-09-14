@@ -1,0 +1,24 @@
+  Each of the functions I have in my tester.cpp have the real function defined in the httpd.cpp file,
+  where the name of the function is after the TEST in this file. So TESTCheckoutRequestType, tests the
+  RequestType input and such. I mainly tested various ways that the httpd request could be malformed and
+  so send a 400 error.
+
+
+  To compile it.
+
+  g++ -std=c++11 tester.cpp httpd.cpp  -o TestServer
+
+
+
+
+  TESTCheckoutRequestType(requestTestSet);
+  TESTGenerateHTTPRequest();
+  TESTCheckFilePathBounds("/test/directory/program/data", "/test/directory/program/data/file.txt");
+  TESTCheckFilePathBounds("/test/directory/program/data", "/test/directory/topsecretdata/data/file.txt");
+  TESTCheckIfProperFormat("GET /test.html HTTP/1.1\r\n\r\n");
+  TESTCheckIfProperFormat("GET/test.html HTTP/1.1\r\n\r\n");
+  TESTCheckIfProperFormat("GET /test.html HTTP/1.1");
+  TESTCheckIfProperFormat("GET  /test.html HTTP/1.1\r\r\n");
+  TESTCheckIfProperFormat("GET/test.htmlHTTP/1.1\r\n\r\n");
+
+
