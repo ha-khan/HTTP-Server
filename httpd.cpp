@@ -73,9 +73,7 @@ void start_httpd(unsigned short port, string doc_root) {
 }
 
 /*
-    //Main driver of a single http response/request
-    //Control of program flow
-    //Request/Response flow.
+    Main driver of a single http response/request
 */
 void HandleHTTPRequest(int clntSocket, string doc_root) {
 
@@ -103,10 +101,6 @@ void HandleHTTPRequest(int clntSocket, string doc_root) {
   close(clntSocket);
 }
 
-/*
-        TODO: Still need to edit this so that recv() doesn't work
-        under the assumption that all bytes are sent in one call.
-*/
 int PopulateBuffer(char *inBuffer, int bufferSize, int clntSocket) {
 
   ssize_t totalBytesRead = 0;
@@ -130,11 +124,9 @@ bool CheckIfProperFormat(string inBuffer) {
     }
   }
 
-  // Does it have exactly 2 <SP>
   if (count != 2) {
     return false;
   }
-  // Now Checks if number of CR == LF and if both are greater than 2..
   std::size_t numCR = 0;
   std::size_t numLF = 0;
   for (std::size_t i = 0; i < tString.size(); i++) {
@@ -157,9 +149,6 @@ bool CheckIfProperFormat(string inBuffer) {
   return true;
 }
 
-/*
-        TODO: FURTHER TESTING NEEDED
-*/
 HTTPRequest *GenerateHTTPRequest(char *inBuffer) {
 
   HTTPRequest *temp = new HTTPRequest;
@@ -186,13 +175,8 @@ HTTPRequest *GenerateHTTPRequest(char *inBuffer) {
     temp->isCorrectFormat = false;
     return temp;
   }
-  // return temp;
 }
 
-/*
- *    Need to test further
-
- * */
 void GetConnectionClose(HTTPRequest *inPtr) {
   std::string toFind = "Connection: close";
   std::size_t found = inPtr->KeyValues.find(toFind);
@@ -204,11 +188,6 @@ void GetConnectionClose(HTTPRequest *inPtr) {
   }
 }
 
-/*
-        TODO: FURTHER TESTING NEEDED
-
-
-*/
 void GenerateHTTPRequestHelper(HTTPRequest *inPtr, string inData) {
 
   int startPosition;
@@ -228,9 +207,6 @@ void GenerateHTTPRequestHelper(HTTPRequest *inPtr, string inData) {
   }
 }
 
-/*
-
-*/
 void CheckHTTPRequestFormat(HTTPRequest *inPtr, string doc_root) {
 
   if (inPtr->URI.compare("/") == 0) {
@@ -293,21 +269,11 @@ bool CheckFileExistence(string newfullFilePath) {
 
   struct stat result;
   if (stat(newfullFilePath.c_str(), &result) == 0) {
-    //  cout << "OK" << endl;
     return false;
   }
 
-  // Means file could not be open..so error.
   return true;
 }
-
-/*
- *
- * Checks to see if Host: would be in header.
- *
- *
- * *
- * */
 
 bool CheckIfHostInHeader(string kValue) {
 
@@ -322,11 +288,6 @@ bool CheckIfHostInHeader(string kValue) {
   }
 }
 
-/*
-        Just checks to see if Request type
-        is GET.
-
-*/
 bool CheckRequestType(HTTPRequest *inPtr) {
 
   string reqType = "GET";
@@ -337,11 +298,6 @@ bool CheckRequestType(HTTPRequest *inPtr) {
   }
 }
 
-/*
-
-  uses realpath to test if the doc_root and URI is a legit filepath.
-
-*/
 bool CheckURI(string fullFilePath, string &newFullFilePath) {
 
   char resolvedPath[4096]; // Assumption here is that length of filepath is not
@@ -349,23 +305,17 @@ bool CheckURI(string fullFilePath, string &newFullFilePath) {
   char *doesExist;
   doesExist = realpath(fullFilePath.c_str(), resolvedPath);
 
-  // Which means there was an error with what the client has sent
-  // Since realPath returned NULL
   if (doesExist == NULL) {
     return true;
   }
 
-  // Set newFullFilePath to the unrapped one.
   newFullFilePath = doesExist;
 
-  // cout << "OK" << endl;
   return false;
 }
 
 /*
-
         converts HTTPRequest to HTTPResponse
-
 */
 HTTPResponse *GenerateHTTPResponse(HTTPRequest *inPtr) {
 
@@ -393,11 +343,6 @@ HTTPResponse *GenerateHTTPResponse(HTTPRequest *inPtr) {
   }
 }
 
-/*
-
-        Finds the file extension..
-
-*/
 string GetFileExtension(string newFullFilePath) {
   size_t startPosition = newFullFilePath.rfind(".");
   string temp =
@@ -485,9 +430,7 @@ void SendFileContents(int clntSocket, string fPath) {
 }
 
 /*
-
         Tests to see if escape directory
-
 */
 bool CheckFilePathBounds(string doc_root, string fixedFilePath) {
   std::locale loc1;
@@ -496,19 +439,12 @@ bool CheckFilePathBounds(string doc_root, string fixedFilePath) {
   for (size_t i = 0; i < doc_root.length(); i++) {
     if (std::toupper(doc_root[i], loc1) !=
         std::toupper(fixedFilePath[i], loc2)) {
-      // So, the 'fixed' file path goes outside the directory given.
       return true;
     }
   }
-  // cout << "OK" << endl;
   return false;
 }
 
-/*
-
-        prepares the string to be sent.
-
-*/
 void sendHTTPResponseHelper(int clntSocket, HTTPResponse *inPtr,
                             string responseMessage) {
 
@@ -532,7 +468,6 @@ void sendHTTPResponseHelper(int clntSocket, HTTPResponse *inPtr,
     // Send header information..
     send(clntSocket, toSend.c_str(), lengthR, 0);
 
-    //  cout << toSend;
   } else {
     string toSend = responseMessage + "\r\n" + "\r\n";
 

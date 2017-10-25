@@ -5,9 +5,6 @@
 
 using namespace std; // get rid of this
 
-/*
-
-*/
 enum errorCode { EC200, EC400, EC403, EC404 };
 
 struct HTTPRequest {
