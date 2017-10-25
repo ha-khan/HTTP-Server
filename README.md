@@ -4,6 +4,7 @@ Client is able to use the GET method to request either jpg, html, or png files s
 To build, run the following.
 
 make clean
+
 make
 
 
