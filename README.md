@@ -6,7 +6,7 @@ of the server logic is written.
 
 
 ## Building project
-The makefile supplied in the src folder;
+The makefile supplied in the src folder.
 
 ```
 make clean
